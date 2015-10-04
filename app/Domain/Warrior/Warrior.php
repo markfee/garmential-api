@@ -12,16 +12,37 @@ class Warrior {
     public function __construct($attributes = [])
     {
         $this->attributes   = $attributes;
+        $this->attributes["strength"]      =   $this->coalesce("strength",      Warrior::DEFAULT_STRENGTH);
+        $this->attributes["weight"]        =   $this->coalesce("weight",        Warrior::DEFAULT_WEIGHT);
+        $this->attributes["health"]        =   $this->coalesce("health",        Warrior::DEFAULT_HEALTH);
+        $this->attributes["intelligence"]  =   $this->coalesce("intelligence",  Warrior::DEFAULT_INTELLIGENCE);
+        $this->attributes["agility"]       =   $this->coalesce("agility",       Warrior::DEFAULT_AGILITY);
     }
 
-    private function getAttribute($name, $default = null)
+    private function coalesce($name, $default = null)
     {
         return empty($this->attributes[$name]) ? $default :$this->attributes[$name];
     }
 
-    public function getStrength() {         return $this->getAttribute("strength",      Warrior::DEFAULT_STRENGTH);        }
-    public function getWeight() {           return $this->getAttribute("weight",        Warrior::DEFAULT_WEIGHT);          }
-    public function getHealth() {           return $this->getAttribute("health",        Warrior::DEFAULT_HEALTH);          }
-    public function getIntelligence() {     return $this->getAttribute("intelligence",  Warrior::DEFAULT_INTELLIGENCE);    }
-    public function getAgility() {          return $this->getAttribute("agility",       Warrior::DEFAULT_AGILITY);         }
+    public function getStrength() {         return $this->attributes["strength"];      }
+    public function getWeight() {           return $this->attributes["weight"];        }
+    public function getHealth() {           return $this->attributes["health"];        }
+    public function getIntelligence() {     return $this->attributes["intelligence"];  }
+    public function getAgility() {          return $this->attributes["agility"];       }
+
+    public function attack(Warrior $target)
+    {
+        $target->attributes["health"] -= $this->getStrength();
+    }
+
+    public function fight_a_round(Warrior $opponent)
+    {
+        $this->attack($opponent);
+        $opponent->attack($this);
+    }
+
+    public function is_defeated()
+    {
+        return ($this->getHealth() <= 0);
+    }
 }
