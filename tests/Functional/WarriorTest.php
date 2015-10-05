@@ -89,4 +89,17 @@ class WarriorTest extends \TestCase {
         $this->assertFalse($warrior1->is_defeated(), "Warrior 1 not yet defeated");
         $this->assertTrue($warrior2->is_defeated(), "Warrior 2 is defeated");
     }
+
+    public function test_i_can_create_randomised_warrior()
+    {
+        $warrior = (new Warrior)->randomise();
+
+        $testcount = 0;
+        $testcount += ($warrior->getStrength()      == Warrior::DEFAULT_STRENGTH);
+        $testcount += ($warrior->getWeight()        == Warrior::DEFAULT_WEIGHT);
+        $testcount += ($warrior->getHealth()        == Warrior::DEFAULT_HEALTH);
+        $testcount += ($warrior->getIntelligence()  == Warrior::DEFAULT_INTELLIGENCE);
+        $testcount += ($warrior->getAgility()       == Warrior::DEFAULT_AGILITY);
+        $this->assertFalse($testcount == 5, "It is unlikely that test count will be 5 but it may happen occasionally");
+    }
 }
