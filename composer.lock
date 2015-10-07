@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0396c881ea07cdafa56514197da43b2d",
-    "content-hash": "b2fb24696a572e405bbeb662cc9fbde7",
+    "hash": "95ac26e28cef1ef27168fda6570385d0",
+    "content-hash": "13347ac65827a0b5b63d9014e0b28886",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -361,6 +361,59 @@
                 "tokenizer"
             ],
             "time": "2015-03-11 20:06:43"
+        },
+        {
+            "name": "kachkaev/php-r",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kachkaev/php-r.git",
+                "reference": "d61cae39a8ee21ece230d175deacd7ff4cbc1bb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kachkaev/php-r/zipball/d61cae39a8ee21ece230d175deacd7ff4cbc1bb6",
+                "reference": "d61cae39a8ee21ece230d175deacd7ff4cbc1bb6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Kachkaev\\PHPR\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Kachkaev",
+                    "email": "alexander@kachkaev.ru",
+                    "homepage": "http://en.kachkaev.ru/"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/kachkaev/php-r/contributors"
+                }
+            ],
+            "description": "Provides ability to run R scripts from PHP",
+            "homepage": "https://github.com/kachkaev/php-r",
+            "keywords": [
+                "Bridge",
+                "r",
+                "statistical analysis",
+                "stats"
+            ],
+            "time": "2015-06-26 23:39:24"
         },
         {
             "name": "laravel/framework",
@@ -2922,7 +2975,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kachkaev/php-r": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
