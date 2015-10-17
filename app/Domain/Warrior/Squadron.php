@@ -1,7 +1,7 @@
 <?php namespace Garmential\Warrior;
 
 
-class WarriorCollection implements \Countable {
+class Squadron implements \Countable {
     private $warriors = [];
 
     public function add(Warrior $warrior)
