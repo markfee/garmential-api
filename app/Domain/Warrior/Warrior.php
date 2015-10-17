@@ -24,12 +24,12 @@ class Warrior {
     {
         static $arr = [];
         if (empty($arr[$mean][$standard_deviation])) {
-            print "\ngenerating stats N({$mean}, {$standard_deviation})\n";
+//            print "\ngenerating stats N({$mean}, {$standard_deviation})\n";
             $arr[$mean][$standard_deviation] = explode(" ", shell_exec("/usr/bin/Rscript -e 'cat(rnorm(100, {$mean}, {$standard_deviation}))'"));
         }
 
         $val = array_pop($arr[$mean][$standard_deviation]);
-        print "{$val}\n";
+//        print "{$val}\n";
         return $val;
     }
 

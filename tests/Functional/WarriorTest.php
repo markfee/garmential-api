@@ -2,7 +2,6 @@
 
 use Garmential\Warrior\Warrior;
 
-
 class WarriorTest extends \TestCase {
 
     private $attributes1 = [
@@ -93,6 +92,8 @@ class WarriorTest extends \TestCase {
     public function test_i_can_create_randomised_warrior()
     {
         $warrior = (new Warrior)->randomise();
+        // Test that a randomised warrior doesn't end up with all of the default attributes (ie not randomised)
+        // there is an unlikely chance that this test will occasionally fail so in that sense it sucks!
 
         $testcount = 0;
         $testcount += ($warrior->getStrength()      == Warrior::DEFAULT_STRENGTH);
