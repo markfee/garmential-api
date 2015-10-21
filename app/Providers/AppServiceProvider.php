@@ -1,7 +1,6 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
-
+use Garmential\Warrior\WarriorCreator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('WarriorCreatorAlias', function()
+        {
+            return new WarriorCreator();
+        });
     }
 }

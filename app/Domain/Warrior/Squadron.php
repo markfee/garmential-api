@@ -11,5 +11,4 @@ class Squadron extends CharacterCollection implements \Countable {
         }
         return $squadron;
     }*/
-
 }

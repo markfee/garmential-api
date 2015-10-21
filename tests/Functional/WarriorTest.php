@@ -1,13 +1,14 @@
 <?php namespace Tests\Functional;
 
 use Garmential\Warrior\Warrior;
-use Garmential\Warrior\WarriorCreator;
+//use \WarriorCreatorAlias as WarriorCreator;
+use \WarriorCreator;
 
 class WarriorTest extends \TestCase {
     private $warriorCreator;
     function __construct()
     {
-        $this->warriorCreator = new WarriorCreator();
+//        $this->warriorCreator = new WarriorCreator();
     }
 
     private $attributes1 = [
@@ -28,14 +29,14 @@ class WarriorTest extends \TestCase {
 
     public function test_i_can_create_a_warrior()
     {
-        $warrior = $this->warriorCreator->Generate();
+        $warrior = WarriorCreator::Generate();
         $this->assertTrue($warrior  instanceof Warrior);
     }
 
     public function test_a_warrior_has_assigned_attributes()
     {
         $attributes = &$this->attributes1;
-        $warrior = $this->warriorCreator->Generate($attributes);
+        $warrior = WarriorCreator::Generate($attributes);
         $this->assertTrue($warrior->getStrength()       == $attributes["strength"]);
         $this->assertTrue($warrior->getWeight()         == $attributes["weight"]);
         $this->assertTrue($warrior->getHealth()         == $attributes["health"]);
@@ -45,8 +46,8 @@ class WarriorTest extends \TestCase {
 
     public function test_a_brute_strength_attack_causes_damage()
     {
-        $warrior1 = $this->warriorCreator->Generate(["strength"=>50, "health"=>75]);
-        $warrior2 = $this->warriorCreator->Generate(["strength"=>35, "health"=>100]);
+        $warrior1 = WarriorCreator::Generate(["strength"=>50, "health"=>75]);
+        $warrior2 = WarriorCreator::Generate(["strength"=>35, "health"=>100]);
 
         $warrior1->attack($warrior2);
 
@@ -55,8 +56,8 @@ class WarriorTest extends \TestCase {
 
     public function test_fighting_a_round_causes_damage_to_both()
     {
-        $warrior1 = $this->warriorCreator->Generate(["strength"=>50, "health"=>75]);
-        $warrior2 = $this->warriorCreator->Generate(["strength"=>35, "health"=>100]);
+        $warrior1 = WarriorCreator::Generate(["strength"=>50, "health"=>75]);
+        $warrior2 = WarriorCreator::Generate(["strength"=>35, "health"=>100]);
 
         $warrior1->fight_a_round($warrior2);
 
@@ -67,8 +68,8 @@ class WarriorTest extends \TestCase {
 
     public function test_repeated_fighting_causes_a_defeat()
     {
-        $warrior1 = $this->warriorCreator->Generate(["strength"=>50, "health"=>75]);
-        $warrior2 = $this->warriorCreator->Generate(["strength"=>35, "health"=>100]);
+        $warrior1 = WarriorCreator::Generate(["strength"=>50, "health"=>75]);
+        $warrior2 = WarriorCreator::Generate(["strength"=>35, "health"=>100]);
 
         $warrior1->fight_a_round($warrior2);
 
