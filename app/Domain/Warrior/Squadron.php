@@ -1,31 +1,15 @@
 <?php namespace Garmential\Warrior;
 
 
-class Squadron implements \Countable {
-    private $warriors = [];
-
-    public function add(Warrior $warrior)
+class Squadron extends CharacterCollection implements \Countable {
+    /*
+    public static function Generate($size = 5)
     {
-        $this->warriors[] = $warrior;
-    }
-
-    public function getNextWarrior()
-    {
-        foreach($this->warriors as $warrior) {
-            if (!$warrior->is_defeated()) {
-                return $warrior;
-            }
+        $squadron = new Squadron;
+        for ($i=0; $i < $size; $i++) {
+            $squadron->add(new Warrior);
         }
-        return null;
-    }
+        return $squadron;
+    }*/
 
-   public function count()
-   {
-       $count = 0;
-       /** @var Warrior $warrior */
-       foreach($this->warriors as $warrior) {
-           $count += ($warrior->is_defeated() ? 0:1);
-       }
-       return $count;
-   }
 }
