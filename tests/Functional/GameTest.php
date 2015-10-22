@@ -1,14 +1,14 @@
 <?php namespace Tests\Functional;
 
-use Garmential\Game\GameManager;
+use Garmential\Game\Game;
 use Mockery\Mock;
 
-class GameManagerTest  extends \TestCase {
+class GameTest  extends \TestCase {
 
     public function test_i_can_create_a_game_manager()
     {
-        $gameManager = new GameManager;
-        $this->assertTrue($gameManager instanceof GameManager);
+        $gameManager = new Game;
+        $this->assertTrue($gameManager instanceof Game);
     }
 
    /*
@@ -22,8 +22,8 @@ class GameManagerTest  extends \TestCase {
 
     public function test_a_game_cannot_start_without_two_players()
     {
-        $gameManager = new GameManager;
-        $this->assertFalse($gameManager->isReadyToStart(), "The game should not be ready to start until two players are added.");
+        $game = new Game;
+        $this->assertFalse($game->isReadyToStart(), "The game should not be ready to start until two players are added.");
 
         $player1Mock = new Mock('Player');
         $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
@@ -31,15 +31,15 @@ class GameManagerTest  extends \TestCase {
         $player2Mock = new Mock('Player');
         $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
 
-        $gameManager->addPlayer($player1Mock);
-        $gameManager->addPlayer($player2Mock);
+        $game->addPlayer($player1Mock);
+        $game->addPlayer($player2Mock);
 
-        $this->assertTrue($gameManager->isReadyToStart(), "The game should now be ready when two players are added and are both ready.");
+        $this->assertTrue($game->isReadyToStart(), "The game should now be ready when two players are added and are both ready.");
     }
 
     public function test_a_game_cannot_start_without_two_players_who_are_both_ready()
     {
-        $gameManager = new GameManager;
+        $game = new Game;
 
         $player1Mock = new Mock('Player');
         $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
@@ -47,10 +47,10 @@ class GameManagerTest  extends \TestCase {
         $player2Mock = new Mock('Player');
         $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(false);
 
-        $gameManager->addPlayer($player1Mock);
-        $gameManager->addPlayer($player2Mock);
+        $game->addPlayer($player1Mock);
+        $game->addPlayer($player2Mock);
 
-        $this->assertFalse($gameManager->isReadyToStart(), "The game should not be ready when both players aren't ready.");
+        $this->assertFalse($game->isReadyToStart(), "The game should not be ready when both players aren't ready.");
     }
 
 }

@@ -1,7 +1,7 @@
 <?php namespace Garmential\Game;
 
 
-class GameManager {
+class Game {
     private $players = [];
 
     function addPlayer($player)
