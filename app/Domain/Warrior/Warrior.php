@@ -2,7 +2,7 @@
 
 class Warrior extends Character {
 
-    protected function __construct($attributes = [])
+    public function __construct($attributes = [])
     {
         $this->attributes   = $attributes;
         $this->initialise_attribute("strength"       ,    $this->random_normal(100.0, 15.0));

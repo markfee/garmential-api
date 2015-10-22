@@ -1,7 +1,7 @@
 <?php namespace Garmential\Warrior;
 
 
-class Squadron extends CharacterCollection implements \Countable {
+class Squadron extends CharacterCollection {
     /*
     public static function Generate($size = 5)
     {

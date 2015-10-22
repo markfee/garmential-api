@@ -4,7 +4,19 @@
 class Character implements CharacterInterface {
 
     protected $attributes = [];
-    protected function __construct($attributes = [])
+
+    protected function create_instance($attributes = [])
+    {
+        $instance = new static($attributes);
+        return $instance;
+    }
+
+    public function __construct($attributes = [])
+    {
+        $this->initialise($attributes);
+    }
+
+    protected function initialise($attributes = [])
     {
         $this->attributes   = $attributes;
         $this->initialise_attribute("strength"     , 100);

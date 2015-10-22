@@ -1,6 +1,7 @@
 <?php namespace App\Providers;
 
-use Garmential\Warrior\WarriorCreator;
+use Garmential\Warrior\CharacterCreator;
+use Garmential\Warrior\Warrior;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind('WarriorCreatorAlias', function()
         {
-            return new WarriorCreator();
+            return new CharacterCreator(new Warrior);
         });
     }
 }

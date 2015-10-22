@@ -1,15 +1,9 @@
 <?php namespace Tests\Functional;
 
 use Garmential\Warrior\Warrior;
-//use \WarriorCreatorAlias as WarriorCreator;
 use \WarriorCreator;
 
 class WarriorTest extends \TestCase {
-    private $warriorCreator;
-    function __construct()
-    {
-//        $this->warriorCreator = new WarriorCreator();
-    }
 
     private $attributes1 = [
         "strength"          => 5,

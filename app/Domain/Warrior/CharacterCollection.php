@@ -1,9 +1,17 @@
 <?php namespace Garmential\Warrior;
 
 
-class CharacterCollection {
+class CharacterCollection implements \Countable {
 
+    /**
+     * @var array
+     */
     protected $characters = [];
+
+    function __construct($characters = [])
+    {
+        $this->characters = $characters;
+    }
 
     public function add(CharacterInterface $character)
     {
