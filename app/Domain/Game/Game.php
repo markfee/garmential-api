@@ -4,6 +4,18 @@
 class Game {
     private $players = [];
 
+    function startPlayWhenReady()
+    {
+        if ($this->isReadyToStart())
+        {
+            $this->notifyNextPlayerOfTurn();
+        }
+    }
+
+    function notifyNextPlayerOfTurn()
+    {
+        $this->players[0]->notifyTurn();
+    }
     function addPlayer($player)
     {
         $this->players[] = $player;

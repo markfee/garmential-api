@@ -11,7 +11,6 @@ class PlayerTest  extends \TestCase {
         $this->assertTrue($player instanceof Player);
     }
 
-
     public function test_a_player_is_not_ready_to_play_until_they_have_a_ready_squadron()
     {
         $player = new Player(new Mock('Game'));
@@ -25,6 +24,12 @@ class PlayerTest  extends \TestCase {
 
         $squadron->shouldReceive('count')->once()->andReturn(4);
         $this->assertFalse($player->isReadyToPlay(), "The player should not be ready if the squadron is not full");
-
     }
+
+    public function test_a_player_will_play_a_turn_when_notified()
+    {
+        $this->assertFalse(true);
+    }
+
+
 }
