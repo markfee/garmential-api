@@ -4,7 +4,9 @@
 class Game {
     /*** @var Player[] */   private $players = [];
     /*** @var Player */     private $currentPlayer;
+    /*** @var Player */     private $currentOpponent;
     /*** @var int*/         private $currentPlayerIndex = 0;
+    /*** @var int*/         private $currentOpponentIndex = 0;
 
     function startPlayWhenReady()
     {
@@ -20,8 +22,9 @@ class Game {
     function firstPlayer()
     {
         $this->currentPlayerIndex = 0;
-        $this->currentPlayer = $this->players[$this->currentPlayerIndex];
-        return $this->currentPlayer;
+        $this->currentOpponentIndex = 1;
+        $this->currentOpponent();
+        return $this->currentPlayer();
     }
 
     /**
@@ -29,9 +32,20 @@ class Game {
      */
     function nextPlayer()
     {
+        $this->currentOpponentIndex = $this->currentPlayerIndex;
         $this->currentPlayerIndex = ($this->currentPlayerIndex == 0 ? 1 : 0);
-        $this->currentPlayer = $this->players[$this->currentPlayerIndex];
-        return $this->currentPlayer;
+        $this->currentOpponent();
+        return $this->currentPlayer();
+    }
+
+    public function currentPlayer()
+    {
+        return $this->currentPlayer = $this->players[$this->currentPlayerIndex];
+    }
+
+    public function currentOpponent()
+    {
+        return $this->currentOpponent = isset($this->players[$this->currentOpponentIndex]) ? $this->players[$this->currentOpponentIndex] : null;
     }
 
     function notifyPlayerOfTurn()
@@ -54,7 +68,10 @@ class Game {
      * @param $turn // json details of move to be played
      */
     function playATurn($turn)
-    {//TODO: implement the turn.
+    {
+        $warrior1 = $this->currentPlayer->getNextWarrior();
+        $warrior2 = $this->currentOpponent->getNextWarrior();
+        $warrior1->attack($warrior2);
         $this->nextPlayer()->notifyTurn();
     }
 

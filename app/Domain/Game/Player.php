@@ -1,4 +1,6 @@
 <?php namespace Garmential\Game;
+use Garmential\Warrior\Squadron;
+use Garmential\Warrior\Warrior;
 
 /**
  * Class Player
@@ -15,14 +17,18 @@ class Player {
      * @var Game
      */
     private $game;
+    /**
+     * @var Squadron
+     */
     private $squadron;
 
     function __construct($game)
     {
         $this->game = $game;
+        $this->game->addPlayer($this);
     }
 
-    function addSquadron($squadron)
+    function addSquadron(Squadron $squadron)
     {
         $this->squadron = $squadron;
     }
@@ -37,6 +43,15 @@ class Player {
      */
     public function notifyTurn()
     {
-        $this->game->playATurn([]);
+        $warrior = $this->getNextWarrior();
+        $this->game->playATurn(["warrior" => $warrior]);
+    }
+
+    /**
+     * @return Warrior
+     */
+    public function getNextWarrior()
+    {
+        return $this->squadron->getNext();
     }
 }

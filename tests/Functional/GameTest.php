@@ -1,6 +1,7 @@
 <?php namespace Tests\Functional;
 
 use Garmential\Game\Game;
+use Garmential\Game\Player;
 use Mockery\Mock;
 
 class GameTest  extends \TestCase {
@@ -25,122 +26,80 @@ class GameTest  extends \TestCase {
         $game = new Game;
         $this->assertFalse($game->isReadyToStart(), "The game should not be ready to start until two players are added.");
 
-        $player1Mock = new Mock('Player');
-        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
 
-        $player2Mock = new Mock('Player');
-        $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
 
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
 
         $this->assertTrue($game->isReadyToStart(), "The game should now be ready when two players are added and are both ready.");
-
-        $player1Mock->mockery_verify();
-        $player2Mock->mockery_verify();
     }
 
     public function test_a_game_cannot_start_without_two_players_who_are_both_ready()
     {
         $game = new Game;
 
-        $player1Mock = new Mock('Player');
-        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(false);
 
-        $player2Mock = new Mock('Player');
-        $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(false);
-
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
 
         $this->assertFalse($game->isReadyToStart(), "The game should not be ready when both players aren't ready.");
-    }
-
-    private function set_up_game()
-    {
-        $game = new Game;
-
-        $player1Mock = new Mock('Player');
-        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $player2Mock = clone($player1Mock);
-
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
-
-        return $game;
-
     }
 
     public function test_I_can_get_player_whose_turn_it_is()
     {
         $game = new Game;
-
-        $player1Mock = new Mock('Player');
-
-        $player1Mock->shouldReceive('notifyTurn')->once();
-
-        $game->addPlayer($player1Mock);
-
+        $this->player1_mock->shouldReceive('notifyTurn')->once();
+        $game->addPlayer($this->player1_mock);
         $game->notifyPlayerOfTurn();
-
-        $player1Mock->mockery_verify();
     }
 
     public function test_that_the_games_begins_with_a_notification_to_player_1_when_it_is_ready()
     {
         $game = new Game;
 
-        $player1Mock = new Mock('Player');
-        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $player1Mock->shouldReceive('notifyTurn')->once();
+        $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive('notifyTurn')->once();
 
-        $player2Mock = new Mock('Player');
-        $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive('notifyTurn')->never();
 
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
 
         $game->startPlayWhenReady();
-
-        $player1Mock->mockery_verify();
-        $player2Mock->mockery_verify();
     }
 
     public function test_next_player()
     {
         $game = new Game;
 
-        $player1Mock = new Mock('Player');
-        $player2Mock = new Mock('Player');
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
-        $this->assertTrue($game->firstPlayer() === $player1Mock, "First Player should be the first one added");
-        $this->assertTrue($game->nextPlayer()  === $player2Mock, "Next Player should be Player2");
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
+        $this->assertTrue($game->firstPlayer() === $this->player1_mock, "First Player should be the first one added");
+        $this->assertTrue($game->nextPlayer()  === $this->player2_mock, "Next Player should be Player2");
 
     }
 
-    public function test_that_the_second_player_is_notified_after_the_first_plays_a_turn()
+    public function test_that_the_second_player_is_attacked_and_notified_after_the_first_plays_a_turn()
     {
         $game = new Game;
 
-        $player1Mock = new Mock('Player');
-        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $player1Mock->shouldReceive('notifyTurn')->once();
+        $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive("notifyTurn")->once();
 
-        $player2Mock = new Mock('Player');
-        $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $player2Mock->shouldReceive('notifyTurn')->once();
+        $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive("notifyTurn")->once();
 
-        $game->addPlayer($player1Mock);
-        $game->addPlayer($player2Mock);
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
 
         $game->startPlayWhenReady();
+        $game->playATurn([["warrior" => $this->warrior1_mock]]);
 
-        $game->playATurn([]);
-        $player1Mock->mockery_verify();
-        $player2Mock->mockery_verify();
+        $this->warrior1_mock->shouldHaveReceived("attack")->withArgs([$this->warrior2_mock])->once();
     }
-
-
-
 }
