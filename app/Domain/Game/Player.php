@@ -11,7 +11,16 @@
  * @package Garmential\Game
  */
 class Player {
+    /**
+     * @var Game
+     */
+    private $game;
     private $squadron;
+
+    function __construct($game)
+    {
+        $this->game = $game;
+    }
 
     function addSquadron($squadron)
     {
@@ -21,5 +30,13 @@ class Player {
     public function isReadyToPlay()
     {
         return !empty($this->squadron) && ($this->squadron->count() == 5);
+    }
+
+    /**
+     * Tell the player it's their turn to play
+     */
+    public function notifyTurn()
+    {
+        $this->game->playATurn([]);
     }
 }

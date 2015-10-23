@@ -76,13 +76,12 @@ class GameTest  extends \TestCase {
         $game = new Game;
 
         $player1Mock = new Mock('Player');
-//        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
 
         $player1Mock->shouldReceive('notifyTurn')->once();
 
         $game->addPlayer($player1Mock);
 
-        $game->notifyNextPlayerOfTurn();
+        $game->notifyPlayerOfTurn();
 
         $player1Mock->mockery_verify();
     }
@@ -106,6 +105,42 @@ class GameTest  extends \TestCase {
         $player1Mock->mockery_verify();
         $player2Mock->mockery_verify();
     }
+
+    public function test_next_player()
+    {
+        $game = new Game;
+
+        $player1Mock = new Mock('Player');
+        $player2Mock = new Mock('Player');
+        $game->addPlayer($player1Mock);
+        $game->addPlayer($player2Mock);
+        $this->assertTrue($game->firstPlayer() === $player1Mock, "First Player should be the first one added");
+        $this->assertTrue($game->nextPlayer()  === $player2Mock, "Next Player should be Player2");
+
+    }
+
+    public function test_that_the_second_player_is_notified_after_the_first_plays_a_turn()
+    {
+        $game = new Game;
+
+        $player1Mock = new Mock('Player');
+        $player1Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $player1Mock->shouldReceive('notifyTurn')->once();
+
+        $player2Mock = new Mock('Player');
+        $player2Mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $player2Mock->shouldReceive('notifyTurn')->once();
+
+        $game->addPlayer($player1Mock);
+        $game->addPlayer($player2Mock);
+
+        $game->startPlayWhenReady();
+
+        $game->playATurn([]);
+        $player1Mock->mockery_verify();
+        $player2Mock->mockery_verify();
+    }
+
 
 
 }
