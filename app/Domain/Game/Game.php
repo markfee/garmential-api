@@ -1,62 +1,27 @@
 <?php namespace Garmential\Game;
-
+use Garmential\Warrior\Warrior;
 
 class Game {
     /*** @var Player[] */   private $players = [];
-    /*** @var Player */     private $currentPlayer;
-    /*** @var Player */     private $currentOpponent;
-    /*** @var int*/         private $currentPlayerIndex = 0;
-    /*** @var int*/         private $currentOpponentIndex = 0;
 
     function startPlayWhenReady()
     {
         if ($this->isReadyToStart())
         {
-            $this->firstPlayer()->notifyTurn();
+            $this->requestPlayersToPlayATurn();
         }
     }
 
-    /**
-     * @return Player
-     */
-    function firstPlayer()
+    function requestPlayersToPlayATurn()
     {
-        $this->currentPlayerIndex = 0;
-        $this->currentOpponentIndex = 1;
-        $this->currentOpponent();
-        return $this->currentPlayer();
-    }
-
-    /**
-     * @return Player
-     */
-    function nextPlayer()
-    {
-        $this->currentOpponentIndex = $this->currentPlayerIndex;
-        $this->currentPlayerIndex = ($this->currentPlayerIndex == 0 ? 1 : 0);
-        $this->currentOpponent();
-        return $this->currentPlayer();
-    }
-
-    public function currentPlayer()
-    {
-        return $this->currentPlayer = $this->players[$this->currentPlayerIndex];
-    }
-
-    public function currentOpponent()
-    {
-        return $this->currentOpponent = isset($this->players[$this->currentOpponentIndex]) ? $this->players[$this->currentOpponentIndex] : null;
-    }
-
-    function notifyPlayerOfTurn()
-    {
-        $this->currentPlayer->notifyTurn();
+        foreach($this->players as $player){
+            $player->notifyTurn();
+        }
     }
 
     function addPlayer($player)
     {
         $this->players[] = $player;
-        $this->currentPlayer = $this->currentPlayer ?: $this->firstPlayer();
     }
 
     function isReadyToStart()
@@ -64,15 +29,22 @@ class Game {
         return $this->doWeHaveEnoughPlayers() && $this->areAllPlayersReady();
     }
 
-    /**
-     * @param $turn // json details of move to be played
-     */
-    function playATurn($turn)
+
+    function playTurnWhenReady()
     {
-        $warrior1 = $this->currentPlayer->getNextWarrior();
-        $warrior2 = $this->currentOpponent->getNextWarrior();
+        $turn1 = $this->players[0]->getNextTurn();
+        $turn2 = $this->players[1]->getNextTurn();
+        if (empty($turn1)||empty($turn2)) {
+            return;
+        }
+        /* @var $warrior1 Warrior */
+        /* @var $warrior2 Warrior */
+        $warrior1 = $turn1[0]["warrior"];
+        $warrior2 = $turn2[0]["warrior"];
+
         $warrior1->attack($warrior2);
-        $this->nextPlayer()->notifyTurn();
+        $warrior2->attack($warrior1);
+        $this->requestPlayersToPlayATurn();
     }
 
     /**

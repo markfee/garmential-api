@@ -38,13 +38,41 @@ class Player {
         return !empty($this->squadron) && ($this->squadron->count() == 5);
     }
 
+    private $nextTurn = null;
+
+    /**
+     *
+     * When passed an array of arrays with details of move(s) to be played
+     * the game will verify that turn and play it.
+     * The minimum requirement is that single array item containing
+     * a warrior is sent, who will then attack whoever the opponents sends.
+     * [
+     *   ["warrior"=>$warrior1], // Move 1
+     *   ["warrior"=>$warrior2], // Move 2, etc.
+     * ]
+     * @return Array $turn[]
+     */
+    public function getNextTurn()
+    {
+        return $this->nextTurn;
+    }
+
+    /**
+     * @param null $nextTurn
+     */
+    public function setNextTurn($nextTurn)
+    {
+        $this->nextTurn = $nextTurn;
+    }
+
     /**
      * Tell the player it's their turn to play
      */
     public function notifyTurn()
     {
         $warrior = $this->getNextWarrior();
-        $this->game->playATurn(["warrior" => $warrior]);
+        $this->setNextTurn(["warrior" => $warrior]);
+        $this->game->playTurnWhenReady();
     }
 
     /**

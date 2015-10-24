@@ -54,7 +54,7 @@ class GameTest  extends \TestCase {
         $game = new Game;
         $this->player1_mock->shouldReceive('notifyTurn')->once();
         $game->addPlayer($this->player1_mock);
-        $game->notifyPlayerOfTurn();
+        $game->requestPlayersToPlayATurn();
     }
 
     public function test_that_the_games_begins_with_a_notification_to_player_1_when_it_is_ready()
@@ -65,23 +65,12 @@ class GameTest  extends \TestCase {
         $this->player1_mock->shouldReceive('notifyTurn')->once();
 
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player1_mock->shouldReceive('notifyTurn')->never();
+        $this->player2_mock->shouldReceive('notifyTurn')->once();
 
         $game->addPlayer($this->player1_mock);
         $game->addPlayer($this->player2_mock);
 
         $game->startPlayWhenReady();
-    }
-
-    public function test_next_player()
-    {
-        $game = new Game;
-
-        $game->addPlayer($this->player1_mock);
-        $game->addPlayer($this->player2_mock);
-        $this->assertTrue($game->firstPlayer() === $this->player1_mock, "First Player should be the first one added");
-        $this->assertTrue($game->nextPlayer()  === $this->player2_mock, "Next Player should be Player2");
-
     }
 
     public function test_that_the_second_player_is_attacked_and_notified_after_the_first_plays_a_turn()
@@ -89,17 +78,21 @@ class GameTest  extends \TestCase {
         $game = new Game;
 
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player1_mock->shouldReceive("notifyTurn")->once();
+        $this->player1_mock->shouldReceive("notifyTurn")->twice();
+        $this->player1_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior1_mock]])->once();
+
 
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player2_mock->shouldReceive("notifyTurn")->once();
+        $this->player2_mock->shouldReceive("notifyTurn")->twice();
+        $this->player2_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior2_mock]])->once();
 
         $game->addPlayer($this->player1_mock);
         $game->addPlayer($this->player2_mock);
 
         $game->startPlayWhenReady();
-        $game->playATurn([["warrior" => $this->warrior1_mock]]);
+        $game->playTurnWhenReady();
 
         $this->warrior1_mock->shouldHaveReceived("attack")->withArgs([$this->warrior2_mock])->once();
+        $this->warrior2_mock->shouldHaveReceived("attack")->withArgs([$this->warrior1_mock])->once();
     }
 }

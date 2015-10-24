@@ -44,9 +44,8 @@ class PlayerTest  extends \TestCase {
         $player->addSquadron($this->squadron1_mock);
 
         $this->game_mock
-            ->shouldReceive('playATurn')
-            ->once()
-            ->withArgs([["warrior" => $this->warrior1_mock]])->once();
+            ->shouldReceive('playTurnWhenReady')
+            ->once();
 
         $player->notifyTurn();
     }
