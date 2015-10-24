@@ -3,6 +3,7 @@
 
 class Character implements CharacterInterface {
 
+    use IdentifierTrait;
     protected $attributes = [];
 
     protected function create_instance($attributes = [])
@@ -13,6 +14,7 @@ class Character implements CharacterInterface {
 
     public function __construct($attributes = [])
     {
+        $this->Identifier_setIdentity("Character");
         $this->initialise($attributes);
     }
 
@@ -62,9 +64,14 @@ class Character implements CharacterInterface {
         $opponent->attack($this);
     }
 
-    public function is_defeated()
+    public function isDefeated()
     {
-        return ($this->getHealth() <= 0);
+        $health = $this->getHealth();
+        print "\n{$this->Identifier_getIdentity()} Health Check: " . $health;
+        if ($health <= 0){
+            return true;
+        }
+        return false;
     }
 
     protected function random_normal($mean, $standard_deviation)

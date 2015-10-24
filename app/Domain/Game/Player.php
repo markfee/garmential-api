@@ -24,6 +24,8 @@ class Player {
 
     function __construct($game)
     {
+        print "\nAdding a player to a game";
+
         $this->game = $game;
         $this->game->addPlayer($this);
     }
@@ -35,8 +37,14 @@ class Player {
 
     public function isReadyToPlay()
     {
-        return !empty($this->squadron) && ($this->squadron->count() == 5);
+        return !empty($this->squadron) && ($this->squadron->count() > 0);
     }
+
+    public function isDefeated()
+    {
+        return $this->squadron->isDefeated();
+    }
+
 
     private $nextTurn = null;
 
@@ -70,8 +78,12 @@ class Player {
      */
     public function notifyTurn()
     {
+        print "\nnotified of a turn";
         $warrior = $this->getNextWarrior();
-        $this->setNextTurn(["warrior" => $warrior]);
+        if (empty($warrior) || $warrior->isDefeated()) {
+            $this->game->concedeDefeat();
+        }
+        $this->setNextTurn([["warrior" => $warrior]]);
         $this->game->playTurnWhenReady();
     }
 

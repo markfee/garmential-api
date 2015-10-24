@@ -24,7 +24,7 @@ class PlayerTest  extends \TestCase {
         $player->addSquadron($this->squadron1_mock);
         $this->assertTrue($player->isReadyToPlay(), "The player should be ready once it has a squadron");
 
-        $this->squadron1_mock->shouldReceive('count')->once()->andReturn(4);
+        $this->squadron1_mock->shouldReceive('count')->once()->andReturn(0);
         $this->assertFalse($player->isReadyToPlay(), "The player should not be ready if the squadron is not full");
     }
 

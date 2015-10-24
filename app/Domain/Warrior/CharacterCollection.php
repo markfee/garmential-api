@@ -2,6 +2,7 @@
 
 
 class CharacterCollection implements \Countable {
+    use IdentifierTrait;
 
     /**
      * @var array
@@ -10,6 +11,7 @@ class CharacterCollection implements \Countable {
 
     function __construct($characters = [])
     {
+        $this->Identifier_setIdentity("CharacterCollection");
         $this->characters = $characters;
     }
 
@@ -21,10 +23,12 @@ class CharacterCollection implements \Countable {
     public function getNext()
     {
         foreach ($this->characters as $character) {
-            if (!$character->is_defeated()) {
+            if (!$character->isDefeated()) {
+                print " {$this->Identifier_getIdentity()} Not defeated";
                 return $character;
             }
         }
+        print " {$this->Identifier_getIdentity()} Defeated";
         return null;
     }
 
@@ -33,8 +37,13 @@ class CharacterCollection implements \Countable {
         $count = 0;
         /** @var Warrior $character */
         foreach ($this->characters as $character) {
-            $count += ($character->is_defeated() ? 0 : 1);
+            $count += ($character->isDefeated() ? 0 : 1);
         }
         return $count;
+    }
+
+    public function isDefeated()
+    {
+        return count($this) == 0;
     }
 }

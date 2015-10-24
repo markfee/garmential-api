@@ -80,11 +80,12 @@ class GameTest  extends \TestCase {
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
         $this->player1_mock->shouldReceive("notifyTurn")->twice();
         $this->player1_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior1_mock]])->once();
-
+        $this->player1_mock->shouldReceive("isDefeated")->andReturn(false);
 
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
         $this->player2_mock->shouldReceive("notifyTurn")->twice();
         $this->player2_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior2_mock]])->once();
+        $this->player2_mock->shouldReceive("isDefeated")->andReturn(false);
 
         $game->addPlayer($this->player1_mock);
         $game->addPlayer($this->player2_mock);
@@ -95,4 +96,31 @@ class GameTest  extends \TestCase {
         $this->warrior1_mock->shouldHaveReceived("attack")->withArgs([$this->warrior2_mock])->once();
         $this->warrior2_mock->shouldHaveReceived("attack")->withArgs([$this->warrior1_mock])->once();
     }
+
+    public function test_that_a_game_will_stop_if_a_player_is_defeated()
+    {
+        $game = new Game;
+
+        $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive("notifyTurn")->once();
+        $this->player1_mock->shouldReceive("isDefeated")->once()->andReturn(true);
+        $this->player1_mock->shouldReceive("getNextTurn")->andReturn([["warrior"=>$this->warrior1_mock]]);
+
+        $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive("notifyTurn")->once();
+        $this->player2_mock->shouldReceive("getNextTurn")->andReturn([["warrior"=>$this->warrior2_mock]]);
+
+
+        $game->addPlayer($this->player1_mock);
+        $game->addPlayer($this->player2_mock);
+
+        $game->startPlayWhenReady();
+        $game->playTurnWhenReady();
+
+//        $this->warrior1_mock->shouldNotHaveReceived("attack");
+//        $this->warrior2_mock->shouldNotHaveReceived("attack");
+    }
+
+
+
 }

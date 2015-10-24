@@ -69,14 +69,14 @@ class WarriorTest extends \TestCase {
 
         $this->assertTrue($warrior1->gethealth() == (40), "warrior1 should be damaged when attacking warrior 2");
         $this->assertTrue($warrior2->gethealth() == (50), "warrior2 should be damaged when attacked by warrior 1");
-        $this->assertFalse($warrior1->is_defeated(), "Warrior 1 not yet defeated");
-        $this->assertFalse($warrior2->is_defeated(), "Warrior 2 not yet defeated");
+        $this->assertFalse($warrior1->isDefeated(), "Warrior 1 not yet defeated");
+        $this->assertFalse($warrior2->isDefeated(), "Warrior 2 not yet defeated");
 
         $warrior1->fight_a_round($warrior2);
 
         $this->assertTrue($warrior1->gethealth() == (5), "warrior1 should be damaged when attacking warrior 2");
         $this->assertTrue($warrior2->gethealth() == (0), "warrior2 should be damaged when attacked by warrior 1");
-        $this->assertFalse($warrior1->is_defeated(), "Warrior 1 not yet defeated");
-        $this->assertTrue($warrior2->is_defeated(), "Warrior 2 is defeated");
+        $this->assertFalse($warrior1->isDefeated(), "Warrior 1 not yet defeated");
+        $this->assertTrue($warrior2->isDefeated(), "Warrior 2 is defeated");
     }
 }
