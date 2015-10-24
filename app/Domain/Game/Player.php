@@ -82,7 +82,7 @@ class Player {
      */
     public function notifyTurn()
     {
-        print "\n{$this->Identifier_getIdentity()} notified of a turn";
+        print "\n{$this->Identifier_getIdentity()} notified of a turn\n";
         $this->setNextTurn(null);
         $warrior = $this->getNextWarrior();
         if (empty($warrior)) {

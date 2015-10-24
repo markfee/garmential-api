@@ -38,17 +38,4 @@ class PlayerTest  extends \TestCase {
         $game->mockery_verify();
     }
 
-    public function test_a_player_will_play_a_turn_when_notified()
-    {
-        $player = new Player($this->game_mock);
-        $player->addSquadron($this->squadron1_mock);
-
-        $this->game_mock
-            ->shouldReceive('playTurnWhenReady')
-            ->once();
-
-        $player->notifyTurn();
-    }
-
-
 }

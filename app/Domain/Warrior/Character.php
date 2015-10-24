@@ -14,7 +14,7 @@ class Character implements CharacterInterface {
 
     public function __construct($attributes = [])
     {
-        $this->Identifier_setIdentity("Character");
+        $this->Identifier_setIdentity(get_called_class());
         $this->initialise($attributes);
     }
 

@@ -15,21 +15,21 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         parent::setUp();
 
-        $this->game_mock = Mockery::mock("Garmential\Game\Game");
+        $this->game_mock = Mockery::mock("Garmential\\Game\\Game");
         $this->game_mock->shouldReceive("addPlayer");
 
-        $this->warrior1_mock = Mockery::mock("Garmential\Warrior\Warrior");
+        $this->warrior1_mock = Mockery::mock("Garmential\\Warrior\\Warrior");
 
-        $this->warrior2_mock = Mockery::mock("Garmential\Warrior\Warrior");
+        $this->warrior2_mock = Mockery::mock("Garmential\\Warrior\\Warrior");
         $this->warrior2_mock->shouldReceive("attack");
 
 
-        $this->squadron1_mock = Mockery::mock("Garmential\Warrior\Squadron");
-        $this->squadron2_mock = Mockery::mock("Garmential\Warrior\Squadron");
+        $this->squadron1_mock = Mockery::mock("Garmential\\Warrior\\Squadron");
+        $this->squadron2_mock = Mockery::mock("Garmential\\Warrior\\Squadron");
 
-        $this->player1_mock = Mockery::mock("Garmential\Game\Player");
+        $this->player1_mock = Mockery::mock("Garmential\\Game\\Player");
 
-        $this->player2_mock = Mockery::mock("Garmential\Game\Player");
+        $this->player2_mock = Mockery::mock("Garmential\\Game\\Player");
     }
 
     public function tearDown()
