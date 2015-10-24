@@ -19,25 +19,17 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $this->game_mock->shouldReceive("addPlayer");
 
         $this->warrior1_mock = Mockery::mock("Garmential\Warrior\Warrior");
-        $this->warrior1_mock->shouldReceive("attack");
-        $this->warrior1_mock->shouldReceive("isDefeated");
 
-        $this->warrior2_mock = clone($this->warrior1_mock);
-
+        $this->warrior2_mock = Mockery::mock("Garmential\Warrior\Warrior");
+        $this->warrior2_mock->shouldReceive("attack");
 
 
         $this->squadron1_mock = Mockery::mock("Garmential\Warrior\Squadron");
-        $this->squadron1_mock->shouldReceive("getNext")->andReturn($this->warrior1_mock);
         $this->squadron2_mock = Mockery::mock("Garmential\Warrior\Squadron");
-        $this->squadron2_mock->shouldReceive("getNext")->andReturn($this->warrior2_mock);
 
-        $this->player1_mock = Mockery::mock("Garmential\Warrior\Warrior");
-        $this->player1_mock->shouldReceive("getNextWarrior")->andReturn($this->warrior1_mock);
-//        $this->player1_mock->shouldReceive("isDefeated");
+        $this->player1_mock = Mockery::mock("Garmential\Game\Player");
 
-        $this->player2_mock = Mockery::mock("Garmential\Warrior\Warrior");
-        $this->player2_mock->shouldReceive("getNextWarrior")->andReturn($this->warrior2_mock);
-//        $this->player2_mock->shouldReceive("isDefeated");
+        $this->player2_mock = Mockery::mock("Garmential\Game\Player");
     }
 
     public function tearDown()
