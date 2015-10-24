@@ -10,7 +10,10 @@ class Game {
      */
     public function isGameover()
     {
-        return $this->gameover || $this->players[0]->isDefeated() || $this->players[1]->isDefeated();
+        return $this->gameover
+        || (!$this->doWeHaveEnoughPlayers())
+        || $this->players[0]->isDefeated()
+        || $this->players[1]->isDefeated();
     }
 
     public function concedeDefeat()
@@ -58,8 +61,6 @@ class Game {
             return;
         }
 
-        print "\nplaying a turn";
-
         /* @var $warrior1 Warrior */
         /* @var $warrior2 Warrior */
         $warrior1 = $turn1[0]["warrior"];
@@ -72,7 +73,9 @@ class Game {
             $warrior2->attack($warrior1);
         }
 
-        $this->requestPlayersToPlayATurn();
+        if (!$this->isGameover()) {
+            $this->requestPlayersToPlayATurn();
+        }
     }
 
     /**

@@ -27,7 +27,6 @@ class GameTest  extends \TestCase {
         $this->assertFalse($game->isReadyToStart(), "The game should not be ready to start until two players are added.");
 
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
 
         $game->addPlayer($this->player1_mock);
@@ -57,15 +56,19 @@ class GameTest  extends \TestCase {
         $game->requestPlayersToPlayATurn();
     }
 
-    public function test_that_the_games_begins_with_a_notification_to_player_1_when_it_is_ready()
+    public function test_that_the_games_begins_with_a_notification_to_both_players_when_it_is_ready()
     {
         $game = new Game;
 
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player1_mock->shouldReceive("isDefeated")->andReturn(false);
         $this->player1_mock->shouldReceive('notifyTurn')->once();
+        $this->player1_mock->shouldReceive("getNextTurn");
 
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
+        $this->player2_mock->shouldReceive("isDefeated")->andReturn(false);
         $this->player2_mock->shouldReceive('notifyTurn')->once();
+        $this->player2_mock->shouldReceive("getNextTurn");
 
         $game->addPlayer($this->player1_mock);
         $game->addPlayer($this->player2_mock);
@@ -78,14 +81,22 @@ class GameTest  extends \TestCase {
         $game = new Game;
 
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player1_mock->shouldReceive("notifyTurn")->twice();
-        $this->player1_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior1_mock]])->once();
-        $this->player1_mock->shouldReceive("isDefeated")->andReturn(false);
-
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player2_mock->shouldReceive("notifyTurn")->twice();
-        $this->player2_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior2_mock]])->once();
-        $this->player2_mock->shouldReceive("isDefeated")->andReturn(false);
+
+        $this->player1_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior1_mock, "test"=>"A"]])->atLeast(1);
+        $this->player2_mock->shouldReceive('getNextTurn')->andReturn([["warrior"=>$this->warrior2_mock, "test"=>"B"]])->atLeast(1);
+
+        $this->player1_mock->shouldReceive("notifyTurn")->atLeast(1);
+        $this->player2_mock->shouldReceive("notifyTurn")->atLeast(1);
+
+        $this->player1_mock->shouldReceive("isDefeated")->andReturn(false, true);
+        $this->player2_mock->shouldReceive("isDefeated")->andReturn(false, true);
+
+        $this->warrior1_mock->shouldReceive("attack");
+        $this->warrior2_mock->shouldReceive("attack");
+
+        $this->warrior1_mock->shouldReceive("isDefeated")->andReturn(false, true);
+        $this->warrior2_mock->shouldReceive("isDefeated")->andReturn(false, true);
 
         $game->addPlayer($this->player1_mock);
         $game->addPlayer($this->player2_mock);
@@ -93,8 +104,8 @@ class GameTest  extends \TestCase {
         $game->startPlayWhenReady();
         $game->playTurnWhenReady();
 
-        $this->warrior1_mock->shouldHaveReceived("attack")->withArgs([$this->warrior2_mock])->once();
-        $this->warrior2_mock->shouldHaveReceived("attack")->withArgs([$this->warrior1_mock])->once();
+        $this->warrior1_mock->shouldHaveReceived("attack")->withArgs([$this->warrior2_mock])->atLeast(1);
+        $this->warrior2_mock->shouldHaveReceived("attack")->withArgs([$this->warrior1_mock])->atLeast(1);
     }
 
     public function test_that_a_game_will_stop_if_a_player_is_defeated()
@@ -102,13 +113,15 @@ class GameTest  extends \TestCase {
         $game = new Game;
 
         $this->player1_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player1_mock->shouldReceive("notifyTurn")->once();
-        $this->player1_mock->shouldReceive("isDefeated")->once()->andReturn(true);
+        $this->player1_mock->shouldReceive("notifyTurn")->atLeast(1);
+        $this->player1_mock->shouldReceive("isDefeated")->andReturn(true)->atMost(1);
         $this->player1_mock->shouldReceive("getNextTurn")->andReturn([["warrior"=>$this->warrior1_mock]]);
 
         $this->player2_mock->shouldReceive('isReadyToPlay')->once()->andReturn(true);
-        $this->player2_mock->shouldReceive("notifyTurn")->once();
+        $this->player2_mock->shouldReceive("notifyTurn")->atLeast(1);
         $this->player2_mock->shouldReceive("getNextTurn")->andReturn([["warrior"=>$this->warrior2_mock]]);
+        $this->warrior1_mock->shouldReceive("isDefeated")->andReturn(false);
+        $this->warrior2_mock->shouldReceive("isDefeated")->andReturn(false);
 
 
         $game->addPlayer($this->player1_mock);
@@ -116,11 +129,9 @@ class GameTest  extends \TestCase {
 
         $game->startPlayWhenReady();
         $game->playTurnWhenReady();
+        $this->assertTrue($game->isGameover(), "The game should be over");
 
-//        $this->warrior1_mock->shouldNotHaveReceived("attack");
-//        $this->warrior2_mock->shouldNotHaveReceived("attack");
+        $this->warrior1_mock->shouldNotHaveReceived("attack");
+        $this->warrior2_mock->shouldNotHaveReceived("attack");
     }
-
-
-
 }
