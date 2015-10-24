@@ -14,11 +14,13 @@ class GameTest  extends \TestCase {
         $player1 = new Player($game);
         $player2 = new Player($game);
 
-        $player1->addSquadron(new Squadron(WarriorCreator::GenerateCollection(1)));
-        $player2->addSquadron(new Squadron(WarriorCreator::GenerateCollection(1)));
+        $player1->addSquadron(new Squadron(WarriorCreator::GenerateCollection(5)));
+        $player2->addSquadron(new Squadron(WarriorCreator::GenerateCollection(5)));
 
         $game->startPlayWhenReady();
         $this->assertTrue($player1->isDefeated()  || $player2->isDefeated(), "One of the players must be defeated");
         $this->assertFalse($player1->isDefeated() && $player2->isDefeated(), "One of the players must not be defeated");
+        print "\n\n";
+
     }
 }

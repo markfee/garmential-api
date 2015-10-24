@@ -1,4 +1,5 @@
 <?php namespace Garmential\Game;
+use Garmential\Warrior\IdentifierTrait;
 use Garmential\Warrior\Squadron;
 use Garmential\Warrior\Warrior;
 
@@ -13,6 +14,7 @@ use Garmential\Warrior\Warrior;
  * @package Garmential\Game
  */
 class Player {
+    use IdentifierTrait;
     /**
      * @var Game
      */
@@ -24,7 +26,9 @@ class Player {
 
     function __construct($game)
     {
-        print "\nAdding a player to a game";
+        $this->Identifier_setIdentity("Player");
+
+        print "\n Adding {$this->Identifier_getIdentity()} to a game";
 
         $this->game = $game;
         $this->game->addPlayer($this);
@@ -78,13 +82,15 @@ class Player {
      */
     public function notifyTurn()
     {
-        print "\nnotified of a turn";
+        print "\n{$this->Identifier_getIdentity()} notified of a turn";
+        $this->setNextTurn(null);
         $warrior = $this->getNextWarrior();
-        if (empty($warrior) || $warrior->isDefeated()) {
+        if (empty($warrior)) {
             $this->game->concedeDefeat();
+            return;
         }
         $this->setNextTurn([["warrior" => $warrior]]);
-        $this->game->playTurnWhenReady();
+        print "\n{$this->Identifier_getIdentity()} good to go after notified of a turn";
     }
 
     /**

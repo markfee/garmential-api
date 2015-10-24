@@ -24,7 +24,7 @@ class CharacterCollection implements \Countable {
     {
         foreach ($this->characters as $character) {
             if (!$character->isDefeated()) {
-                print " {$this->Identifier_getIdentity()} Not defeated";
+                print " {$character->Identifier_getIdentity()} Not defeated";
                 return $character;
             }
         }

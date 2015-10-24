@@ -31,6 +31,8 @@ class Game {
         foreach($this->players as $player){
             $player->notifyTurn();
         }
+        $this->playTurnWhenReady();
+
     }
 
     function addPlayer($player)
